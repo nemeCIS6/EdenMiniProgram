@@ -1,35 +1,43 @@
+// A 'test' method is declared in this page.
+// As web-view in page.axml has set 'test' for the call of 'onMessage',
+// after my.postMessage is executed in the web-view, test will be called.
 Page({
-  onLoad(query) {
-    // 页面加载
-    console.info(`Page onLoad with query: ${JSON.stringify(query)}`);
+  onLoad(e){
+    console.log('page loaded');
+
+    this.webViewContext = my.createWebViewContext('web-view-1');    
+
+    my.postMessage({'sendToMiniProgram': '0'});
+
+    my.onMessage = function(e) {
+      console.log(e); //{'sendToWebView': '1'}
+    }
+
+    // my.getAuthCode({
+    //   scopes: 'auth_user',
+    //   success: (res) => {
+    //     my.alert({
+    //       content: res.authCode,
+    //     });
+    //   },
+    // });
   },
-  onReady() {
-    // 页面加载完成
+  test(e){
+    console.log('test event');
+    my.alert({
+      content:JSON.stringify(e.detail),
+    });  
+    this.webViewContext.postMessage({'sendToWebView': '1'});
   },
-  onShow() {
-    // 页面显示
-  },
-  onHide() {
-    // 页面隐藏
-  },
-  onUnload() {
-    // 页面被关闭
-  },
-  onTitleClick() {
-    // 标题被点击
-  },
-  onPullDownRefresh() {
-    // 页面被下拉
-  },
-  onReachBottom() {
-    // 页面被拉到底部
-  },
-  onShareAppMessage() {
-    // 返回自定义分享信息
-    return {
-      title: 'My App',
-      desc: 'My App description',
-      path: 'pages/index/index',
-    };
-  },
+  onGetAuthorize(res) {
+    my.getOpenUserInfo({
+        fail: (res) => {
+          console.log('err: ', res);
+        },
+        success: (res) => {
+            let userInfo = JSON.parse(res.response).response;
+            console.log('success: ', userInfo);
+        }
+    });
+  }
 });
