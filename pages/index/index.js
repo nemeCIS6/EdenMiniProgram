@@ -2,42 +2,74 @@
 // As web-view in page.axml has set 'test' for the call of 'onMessage',
 // after my.postMessage is executed in the web-view, test will be called.
 Page({
-  onLoad(e){
-    console.log('page loaded');
-
-    this.webViewContext = my.createWebViewContext('web-view-1');    
-
-    my.postMessage({'sendToMiniProgram': '0'});
-
-    my.onMessage = function(e) {
-      console.log(e); //{'sendToWebView': '1'}
+  data: {
+    text: 'Please wait... Logging you in...'
+  },
+  onLoad(e) {
+    my.showLoading({
+      content: this.data.text
+    });
+    const that = this;
+    const global_data = getApp().globalData;
+    const setErrorMesaage = ()=> {
+        this.setData({
+          text: "Authentication error. Please re-open store in GLife Menu."
+        })
     }
-
-    // my.getAuthCode({
-    //   scopes: 'auth_user',
-    //   success: (res) => {
-    //     my.alert({
-    //       content: res.authCode,
-    //     });
-    //   },
-    // });
-  },
-  test(e){
-    console.log('test event');
-    my.alert({
-      content:JSON.stringify(e.detail),
-    });  
-    this.webViewContext.postMessage({'sendToWebView': '1'});
-  },
-  onGetAuthorize(res) {
-    my.getOpenUserInfo({
-        fail: (res) => {
-          console.log('err: ', res);
-        },
-        success: (res) => {
-            let userInfo = JSON.parse(res.response).response;
-            console.log('success: ', userInfo);
-        }
+    console.log({ globalData: global_data })
+    let testing = 'nothing';
+    my.getAuthCode({
+      scopes: 'auth_user',
+      success: (res) => {
+        console.log(`inside success`);
+        my.request({
+          url: `${global_data.shopconnectAPI()}${global_data.endpoints.authenticate(global_data.merchantId)}`,
+          method: 'POST',
+          data: {
+            "referenceClientId": global_data.clientId,
+            "grantType": "AUTHORIZATION_CODE",
+            "authCode": res.authCode,
+            "extendInfo": "{\"customerBelongsTo\":\"GCASH\"}"
+          },
+          dataType: 'json',
+          success: function (res) {
+            testing = 'something';
+            console.log({ global_data });
+            if (res.error) throw {};
+            global_data.authentication = res.data;
+            my.hideLoading();
+            my.navigateTo({
+              url: '/pages/store/store'
+            });
+          },
+          fail: function (res) {
+            console.log({ global_data });
+            testing = 'something';
+            my.hideLoading();
+            setErrorMesaage();
+          },
+          complete: function (res) {
+            my.hideLoading();
+          }
+        });
+        console.log({ testing });
+        console.log({ url: `${global_data.shopconnectAPI()}${global_data.endpoints.authenticate(global_data.merchantId)}` });
+        console.log(`exit success`);
+        my.hideLoading({
+          page: that,  // Prevents switching to other pages when execution, page pointing is not accurate
+        });
+        my.alert(res.authCode);
+        console.log({ resMyGetAuth: res })
+      },
+      fail: (e) => {
+        console.log({ this: this });
+        this.setData({
+          text: "Authentication error. Please re-open store in GLife Menu."
+        })
+        my.hideLoading({
+          page: that,  // Prevents switching to other pages when execution, page pointing is not accurate
+        })
+      }
     });
   }
 });

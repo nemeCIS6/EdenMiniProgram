@@ -14,11 +14,15 @@
   my.getEnv(function(res) {
     console.log(res.miniprogram) // true
   });
+
+  console.log({location:window.location})
 </script>
 
 
-<view>
-  <web-view id="web-view-1" src="https://xload.io/" onMessage="test"></web-view>
+<view class="page">
+  <view class="text-view">
+    <text>{{text}}</text>
+  </view>
 </view>
 
 <!-- <view>
