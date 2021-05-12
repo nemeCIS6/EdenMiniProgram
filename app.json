@@ -1,9 +1,10 @@
 {
   "pages": [
     "pages/index/index",
-    "pages/store/store"
+    "pages/store/store",
+    "pages/thankyou/thankyou"
   ],
   "window": {
-    "defaultTitle": "My App"
+    "defaultTitle": "XLOAD Test Store"
   }
 }

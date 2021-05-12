@@ -17,7 +17,6 @@ Page({
         })
     }
     console.log({ globalData: global_data })
-    let testing = 'nothing';
     my.getAuthCode({
       scopes: 'auth_user',
       success: (res) => {
@@ -33,8 +32,7 @@ Page({
           },
           dataType: 'json',
           success: function (res) {
-            testing = 'something';
-            console.log({ global_data });
+            console.log({ resDataSuccess:res.data });
             if (res.error) throw {};
             global_data.authentication = res.data;
             my.hideLoading();
@@ -43,8 +41,7 @@ Page({
             });
           },
           fail: function (res) {
-            console.log({ global_data });
-            testing = 'something';
+            console.log({ resDataFail:res.data });
             my.hideLoading();
             setErrorMesaage();
           },
@@ -52,13 +49,11 @@ Page({
             my.hideLoading();
           }
         });
-        console.log({ testing });
         console.log({ url: `${global_data.shopconnectAPI()}${global_data.endpoints.authenticate(global_data.merchantId)}` });
         console.log(`exit success`);
         my.hideLoading({
           page: that,  // Prevents switching to other pages when execution, page pointing is not accurate
         });
-        my.alert(res.authCode);
         console.log({ resMyGetAuth: res })
       },
       fail: (e) => {

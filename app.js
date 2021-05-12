@@ -9,8 +9,10 @@ App({
     // options.query == {number:1}
   },
   globalData: {
+    currentOrderId: null,
     merchantId: '5716170548183040',
     clientId: '2021020917121300012392',
+    slug: 'xload-test-store',
     GCashSession:{
       accessToken: null,
       gcashCustomerId: null,
@@ -29,7 +31,8 @@ App({
     endpoints:{
       authenticate: (merchantId)=> `/gcash/authenticate/${merchantId}`,
       verify: `/gcash/verify`,
-      checkSession: `/gcash/session`
+      checkSession: `/gcash/session`,
+      checkout:(orderId)=> `/checkout/${orderId}`
     }
   }
 });
