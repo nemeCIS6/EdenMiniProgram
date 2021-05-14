@@ -11,7 +11,7 @@ Page({
     console.log('page loaded');
     const global_data = getApp().globalData;
     this.setData({
-      currentUrl: `${this.data.currentUrl}/${global_data.authentication.otp}/${global_data.authentication.authentication}/gcash`
+      currentUrl: `${this.data.currentUrl}/${global_data.authentication.otp}/${global_data.authentication.authentication}/hideTopNav`
     })
     console.log({ currentUrl: this.data.currentUrl });
     this.webViewContext = my.createWebViewContext('web-view-1');
