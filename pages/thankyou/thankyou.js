@@ -13,15 +13,6 @@ Page({
     })
     console.log({ currentUrl: this.data.currentUrl });
     this.webViewContext = my.createWebViewContext('web-view-1');
-
-    // my.postMessage({ 'sendToMiniProgram': '0' });
-
-    /*my.onMessage = function (e) {
-      console.log(e);
-      this.setData({
-        currentUrl: e.name
-      })
-    }*/
   },
   listenToURLChange(fromWebview) {
     const global_data = getApp().globalData;

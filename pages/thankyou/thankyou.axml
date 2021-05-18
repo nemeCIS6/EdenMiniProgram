@@ -2,15 +2,3 @@
 <view>
   <web-view id="web-view-1" src={{currentUrl}} onMessage="listenToURLChange"></web-view>
 </view>
-
-<!-- <view>
-  <button 
-      a:if="{{true}}" 
-      onTap="onGetAuthorize" 
-      open-type="getAuthorize" 
-      onGetAuthorize="onGetAuthorize" 
-      onError="onAuthError" 
-      scope='userInfo'>
-      Authenticate
-  </button>
-</view> -->
